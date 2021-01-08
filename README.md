@@ -4,7 +4,7 @@
 for new connections or service requests(wireless internet/D2H connections)
 and track the work done by engineers at customer sites
 
-### Feateures Description
+### Features Description
 * Following are important features of the portal.
    - Portal to log request for new connections or service requests.
    - Engineers viewing scheduled jobs on mobile device and updating the jobs.
