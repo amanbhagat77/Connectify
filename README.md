@@ -30,3 +30,7 @@ Supervisor dashboard.
 * Membership providers to be used for users and role creation
 * All transactions must happen using Web API.
 * Use Entity Framework for data access layer
+
+## Solution
+* Web application based on the above requirement has been hosted on Azure. Please click on the below url to access the web site.
+[Connectify Job Tracker Application](https://connectify20210108162420.azurewebsites.net/)
