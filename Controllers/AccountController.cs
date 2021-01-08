@@ -9,6 +9,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Connectify.Models;
+using Connectify.ViewModels;
+using Microsoft.AspNet.Identity.EntityFramework;
+
 
 namespace Connectify.Controllers
 {
@@ -151,10 +154,23 @@ namespace Connectify.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { 
+                    UserName = model.UserName, 
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
+                    Mapped = false};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+
+                    //Temp Code to create a store manager role
+                    /*var rolestore = new RoleStore<IdentityRole>(new ApplicationDbContext());
+                    var roleManager = new RoleManager<IdentityRole>(rolestore);
+                    await roleManager.CreateAsync(new IdentityRole(RoleName.Engineer));
+                    await UserManager.AddToRoleAsync(user.Id, RoleName.Engineer);*/
+
+
+
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -449,6 +465,7 @@ namespace Connectify.Controllers
             {
                 return Redirect(returnUrl);
             }
+
             return RedirectToAction("Index", "Home");
         }
 

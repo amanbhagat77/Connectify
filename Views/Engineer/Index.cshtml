@@ -1,0 +1,220 @@
+﻿@model Connectify.Dto.EngineerDto
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Jobs To Do List</h2>
+<table id="tblJobListByEngineer" class="table table-hover table-bordered table-responsive-sm">
+    <thead>
+        <tr>
+            <th>Job Id</th>
+            <th>Customer Name</th>
+            <th>Mobile Number</th>
+            <th>Address</th>
+            <th>Product Type</th>
+            <th>Job Type</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+</table>
+<input id="userId" hidden value="@Model.Id">
+
+@section scripts
+{
+    <script>
+
+        $(document).ready(function () {
+            var currentUserId = $("#userId").val();
+            var table = $("#tblJobListByEngineer").DataTable({
+                ajax: {
+                    url: "/api/jobs/?engineerId=" + currentUserId,
+                    method: "GET",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "id"
+                    },
+                    {
+                        data: "customerName"
+                    },
+                    {
+                        data: "phoneNumber"
+                    },
+                    {
+                        data: "address"
+                    },
+                    {
+                        data: "jobItem"
+                    },
+                    {
+                        data: "jobType"
+                    },
+                    {
+                        data: "status",
+                        class: "tdStatus"
+                    },
+                    {
+                        data: "id",
+                        class: "action",
+                        render: function (data, type, row) {
+                            if (row.status === "Allocated") {
+                                var acceptBtn = "<button class = 'btn btn-link js-accept' data-job-id=" + data + ">Accept</button>";
+                                var rejectBtn = "<button class = 'btn btn-link js-reject' style = 'color:red' data-job-id=" + data + ">Reject</button>";
+                                //console.log(row.status);
+                                return acceptBtn + " " + rejectBtn; 
+                            }
+                            else {
+                                var updateBtn = "<button class = 'btn btn-link js-update' data-job-id=" + data + ">Update Status</button>";
+                                return updateBtn;
+                            }
+                        }
+                            
+                            
+                    }
+                ]
+            });
+
+            //Reject Button
+            $("#tblJobListByEngineer").on("click", ".js-reject", function () {
+                var btnReject = $(this);
+                //console.log("Hello");
+                var description;
+                bootbox.dialog({
+                    title: 'Please specify reason for rejection',
+                    message: '<div id ="divReject"><textarea class="form-control" id="reject" required></textarea></div>',
+                    size: "small",
+                    onEscape: true,
+                    backdrop: true,
+                    buttons: {
+                        Reject: {
+                            label: 'Reject',
+                            className: 'btn-success',
+                            callback: function () {
+                                var strDescription = $("#reject").val();
+                                if (strDescription.length != 0) {
+                                    var acceptJobDto = {
+                                        jobId: btnReject.attr("data-job-id"),
+                                        isAccepted: false,
+                                        description: strDescription
+                                    };
+
+                                    $.ajax({
+                                        url: "/api/jobs/",
+                                        method: "PUT",
+                                        data: acceptJobDto,
+                                        success: function () {
+                                            toastr.success("Job Rejected Successfully");
+                                            table.row(btnReject.parents("tr")).remove().draw();
+                                        }
+                                    })
+                                }
+                                else {
+                                    $("#divReject").attr('class', 'input-validation-error');
+                                    return false;
+                                }
+                                
+                            }
+                        },
+                        Cancel: {
+                            label: 'Cancel',
+                            className: 'btn-danger',
+                            callback: function () {
+
+                            }
+                        }
+                    }
+                })
+            })
+            //Accept Button
+            $("#tblJobListByEngineer").on("click", ".js-accept", function () {
+                var btnAccept = $(this);
+                bootbox.confirm({
+                    size: "small",
+                    message: "Are you sure?",
+                    callback: function (result) { 
+                        /* result is a boolean; true = OK, false = Cancel*/
+                        if (result) {
+                            var acceptJobDto = {
+                                jobId: btnAccept.attr("data-job-id"),
+                                isAccepted: true,
+                                description: ''
+                            };
+                            $.ajax({
+                                url: "/api/jobs/",
+                                method: "PUT",
+                                data: acceptJobDto,
+                                success: function () {
+                                    //Storint job Id
+                                    var jobId = btnAccept.attr("data-job-id");
+                                    //Removing Accept and reject Button
+                                    var tdAction = btnAccept.parent();
+                                    tdAction.empty();
+                                    //update button
+                                    var updateBtn = "<button class = 'btn btn-link js-update' data-job-id=" + jobId + ">Update Status</button>";
+                                    tdAction.append(updateBtn)
+
+                                    //console.log(tdAction);
+                                    toastr.success("Job Accepted Successfully");
+                                }
+                            })
+                        }
+                    }
+                })
+            })
+
+            //Update Button
+            $("#tblJobListByEngineer").on("click", ".js-update", function () {
+                var btnUpdate = $(this);
+                bootbox.prompt({
+                    title: "Please update the Job Status",
+                    inputType: 'select',
+                    class: "selUpdate",
+                    size: "small",
+                    inputOptions: [
+                        {
+                            text: 'Choose one...',
+                            value: '',
+                        },
+                        {
+                            text: 'OnSite',
+                            value: 'OnSite',
+                        },
+                        {
+                            text: 'Completed',
+                            value: 'Completed',
+                        },
+                        {
+                            text: 'Onhold',
+                            value: 'Onhold',
+                        }
+                    ],
+                    callback: function (result) {
+                        if (result == null) {
+                            return true; // Handling Cancel Button
+                        }
+                        if (result.length == 0) {
+                            $(".selUpdate").attr('class', 'input-validation-error');
+                            return false;
+                        } 
+                        console.log(btnUpdate.val());
+                        $.ajax({
+                            url: "/api/jobs/?jobId=" + btnUpdate.attr("data-job-id") + "&status=" + result,
+                            method: "PUT",
+                            success: function () {
+                                var $tdStatus = btnUpdate.parents("tr").children(".tdStatus");
+                                $tdStatus.html(result);
+                                toastr.success("Status Updated Successfully");
+                            }
+                        });
+                    }
+                });
+            })
+
+
+        })
+    </script>
+        
+}
+
