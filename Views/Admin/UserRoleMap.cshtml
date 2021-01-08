@@ -42,7 +42,7 @@
                         class: "dataAssignedRoles",
                         render: function (data, type, row) {
                             //console.log(data));
-                            var $list = $("<ul></ul", {
+                            var $list = $("<p></p>", {
                                 "id": "assignedRoles",
                                 "class": "list-group"
 
@@ -52,10 +52,10 @@
                             //console.log($list);
                             if (data) {
                                 data.forEach(function (element) {
-                                    var $li = $("<li></li>", {
+                                    var $li = $("<p></p>", {
                                         "text": element
                                     });
-                                    $list.append($li);
+                                    $list.append($li); 
                                 });
                             }
                             
@@ -112,8 +112,8 @@
                 })
                     .done(function () {
                         toastr.success("Role is Successfully assigned ");
-                        var $li = $("<li></li>", {
-                            text: selRoleName
+                        var $li = $("<p></p>", {
+                            text: selRoleName 
                         });
                         list.append($li);
 

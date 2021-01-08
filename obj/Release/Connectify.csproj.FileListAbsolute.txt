@@ -131,3 +131,4 @@ C:\Users\amanb\source\repos\Connectify\Connectify\obj\Release\Connectify.csproj.
 C:\Users\amanb\source\repos\Connectify\Connectify\obj\Release\Connectify.csproj.CopyComplete
 C:\Users\amanb\source\repos\Connectify\Connectify\obj\Release\Connectify.dll
 C:\Users\amanb\source\repos\Connectify\Connectify\obj\Release\Connectify.pdb
+C:\Users\amanb\source\repos\Connectify\Connectify\obj\Release\Connectify.Migrations.AddAdminToUsersTable.resources
