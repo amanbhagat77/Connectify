@@ -25,7 +25,7 @@ Supervisor dashboard.
 * Call center user should be able to search any job by customer name/phone number and check for status.
 
 ## Technology Requirements
-** Technical Stack **
+**Technical Stack**
 * Asp.NET MVC for UI
 * Membership providers to be used for users and role creation
 * All transactions must happen using Web API.
