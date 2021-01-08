@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Home Page";
+}
+<div class="jumbotron">
+    <h1>Connectify</h1>
+    <p class="lead">Hi @User.Identity.Name!</p>
+    <p class="lead">Welcome to Connectify Job Tracking Application</p>
+    <p> <a href="/Job/Index" class="btn btn-primary btn-lg">Click here to get Job List</a></p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Create Job Request</h2>
+        <p>
+            Please Click below to create a Job Request against a service Request.
+        </p>
+        <p><a class="btn btn-success" href="/Job/Create">Create</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Allocate Job</h2>
+        <p>Please click on the button below to allocate jobs to Engineer, if you are a supervisor</p>
+        <p><a class="btn btn-success" href="/Job/allocate">Allocate</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Admin</h2>
+        <p>Please click below for the admin view, if you are an Admin</p>
+        <p><a class="btn btn-success" href="/Admin/SupervisorEngineer">Admin</a></p>
+    </div>
+</div>

@@ -1,0 +1,118 @@
+﻿@model Connectify.Dto.JobDto
+@{
+    ViewBag.Title = "CreateJobForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create a Job Request</h2>
+
+<form id="newJob">
+    <div class="form-group">
+        <label>Customer Name</label>
+        <div class="tt-container">
+            <input id="txtCustomerName" name="txtCustomerName" required type="text" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Address</label>
+        <div class="tt-container">
+            <input id="txtAddress" name="txtAddress" required type="text" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>City</label>
+        <div class="tt-container">
+            <input id="txtCity" name="txtCity" type ="text" class="form-control" required />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>State</label>
+        <div class="tt-container">
+            <input id="txtState" name="txtState" type="text" class="form-control" required/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Mobile Number</label>
+        <div class="tt-container">
+            <input id="txtPhoneNumber" name="txtPhoneNumber" data-rule-validNumber="true" type="text" class="form-control" required />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Product</label>
+        <div class="tt-container">
+            <select id="txtProduct" name="txtProduct" class="form-control">
+                <option>Wireless Internet</option>
+                <option>D2H Connection</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Job Type</label>
+        <div class="tt-container">
+            <select id="txtJobType" name="txtJobType" class="form-control">
+                <option>Install</option>
+                <option>Repair</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Prefered Date and Time</label>
+        <div class="tt-container">
+            <input id="date" name="date" type="datetime-local" class="form-control" required/>
+        </div>
+    </div>
+    <button class="btn btn-primary">Submit</button>
+
+</form>
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval");
+    <script>
+        $(document).ready(function () {
+
+            var viewmodel;
+            
+            $.validator.addMethod("validNumber", function () {
+                var pNumber =  $("#txtPhoneNumber").val();
+                var re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+                console.log(re.test(pNumber));
+                return re.test(pNumber);
+            }, "Please enter a valid mobile number");
+
+            var validator = $("#newJob").validate({  
+                submitHandler: function () {
+                    viewmodel = {
+                        customerName: $("#txtCustomerName").val(),
+                        phoneNumber: $("#txtPhoneNumber").val(),
+                        address: $("#txtAddress").val(),
+                        city: $("#txtCity").val(),
+                        state: $("#txtState").val(),
+                        jobItem: $("#txtProduct").val(),
+                        jobType: $("#txtJobType").val(),
+                        preferedDateTime: $("#date").val()
+                    };
+                    $.ajax({
+                        url: "/api/jobs",
+                        method: "post",
+                        data: viewmodel
+                    })
+                        .done(function () {
+                            toastr.success("Job Request Successfully Created.");
+                            $('#newJob').trigger("reset");
+                            viewmodel = {};
+                            validator.resetForm();
+                        })
+                        .fail(function () {
+                            toastr.error("Something unexpexted happened. ");
+                        })
+                    return false;
+                }
+            })
+
+        })
+    </script>
+        
+}
+

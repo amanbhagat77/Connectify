@@ -1,0 +1,138 @@
+﻿
+@{
+    ViewBag.Title = "SupervisorEngineer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Map Supervisor Engineer</h2>
+
+<form id="mapSupervisorEngineer">
+    <div class="form-group">
+        <label>Supervisors</label>
+        <div class="tt-container">
+            <select placeholder="Select Supervisor" id="supervisors" class="form-control list-group" required>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Engineers</label>
+        <div class="tt-container">
+            <select multiple ="true" class="chosen-select" required>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-sm-4"><b>Mapped Enginners: </b><ul id="engineersListAssigned" class="list-group"></ul></div>
+    </div>
+    <button class="btn btn-primary js-submit">Submit</button>
+</form>
+
+@section scripts
+{
+    <script>
+
+        $(document).ready(function () {
+            // Supervisor Select List
+            var vm = {
+                engineerIds: []
+            };
+            $.ajax({
+                url: "/api/supervisors",
+                method: "get",
+            })
+                .done(function (result) {
+                    var $select = $("#supervisors");
+                    result.forEach(function (element) {
+                        var $option = $("<option></option>", {
+                            "text": element.userName,
+                            "value": element.id
+                        });
+                        $select.append($option);
+                    })
+                    $select.trigger("chosen:updated");
+                });
+
+            $("#supervisors").chosen({
+                placeholder_text_single: "Select Supervisor",
+                no_results_text: "Oops, nothing found!"
+            });
+
+            $("#supervisors").on("change", function () {
+                var supervisorId = $(this).val();
+                vm.supervisorId = supervisorId;
+                console.log(vm);
+                //Remove the existing list items then start adding
+                var parentNode = document.getElementById("engineersListAssigned");
+                while (parentNode.lastElementChild) {
+                    parentNode.removeChild(parentNode.lastElementChild);
+                }
+                
+                $.ajax({
+                    url: "/api/supervisors/?supervisorId=" + supervisorId,
+                    method: "GET",
+                })
+                    .done(function (result) {
+                        result.forEach(function (element) {
+                            $("#engineersListAssigned").append("<li class='list-group-item'>" + element.userName + "</li>");
+                        })
+                    })
+            });
+            //console.log(supervisors);
+
+
+            //Engineer Select List
+            $.ajax({
+                url: "/api/engineers",
+                method: "get",
+            })
+                .done(function (result) {
+                    var $select = $(".chosen-select");
+                    result.forEach(function (element) {
+                        var $option = $("<option></option>", {
+                            "text": element.userName,
+                            "value": element.id
+                        });
+                        $select.append($option);
+                        
+                    })
+                    $(".chosen-select").trigger("chosen:updated");
+                });
+
+            $(".chosen-select").chosen({
+                width: "30%",
+                max_selected_options: 10
+            });
+
+            $(".chosen-select").on("change", function (evt, params) {
+                var deselectedval = params.deselected;
+                var selectedValue = params.selected;
+                if (deselectedval) {
+                    vm.engineerIds.pop(deselectedval);
+                }
+                else {
+                    vm.engineerIds.push(selectedValue);
+                }
+                vm.supervisorId = $("#supervisors").val();
+                console.log(vm);
+            });
+            $("#mapSupervisorEngineer").on("click", ".js-submit", function (event) {
+                event.preventDefault();
+                $.ajax({
+                    url: "/api/supervisors",
+                    method: "post",
+                    data: vm
+                })
+                    .done(function(){
+                        toastr.success("Engineers Successfully Mapped");
+                        $(".chosen-select").val('').trigger("chosen:updated");
+
+                    })
+                    .fail(function () {
+                        toastr.error("Something unexpected occurred");
+                    });
+            })
+
+        })
+    </script>    
+}

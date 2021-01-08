@@ -1,0 +1,132 @@
+﻿
+@{
+    ViewBag.Title = "UserRoleMap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Assign Roles to User</h2>
+<table id="tblUserRole" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Assigned Roles</th>
+            <th class="strRolesList">Roles List</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#tblUserRole").dataTable({
+                ajax: {
+                    url: "/api/adminuserrole/",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "userName"
+                    },
+                    {
+                        data: "email"
+                    },
+                    {
+                        data: "phoneNumber"
+                    },
+                    {
+                        data: "assignedRoles",
+                        class: "dataAssignedRoles",
+                        render: function (data, type, row) {
+                            //console.log(data));
+                            var $list = $("<ul></ul", {
+                                "id": "assignedRoles",
+                                "class": "list-group"
+
+                            });
+                            if (data.length == 0)
+                                return $list.prop("outerHTML");
+                            //console.log($list);
+                            if (data) {
+                                data.forEach(function (element) {
+                                    var $li = $("<li></li>", {
+                                        "text": element
+                                    });
+                                    $list.append($li);
+                                });
+                            }
+                            
+                            return $list.prop("outerHTML");
+                        }
+                    },
+                    {
+                        data: "roles",
+                        class: "strRolesList",
+                        render: function (d, t, r) {
+                            var $select = $("<select></select>", {
+                                "id": "rolesList",
+                                "class": "form-control"
+                            });
+                            //console.log(d[0]);
+                            d.forEach(function (element) {
+                                var $option = $("<option></option>", {
+                                    "text": element.name,
+                                    "value": element.id
+                                });
+                                $select.append($option);
+                            });
+                            return $select.prop("outerHTML");
+                        }
+                    },
+                    {
+                        data: "userId",
+                        render: function (data) {
+                            return "<button class= 'btn btn-link js-assign' data-user-id=" + data + ">Assign</button>"
+                        }
+                    }
+                ]
+            });
+            
+            $("#tblUserRole").on("click", ".js-assign", function () {
+                var button = $(this);
+
+                var tableData = button.parents("tr").children(".dataAssignedRoles");
+                var list = tableData.children("#assignedRoles");
+
+                var select = button.parents("tr").children(".strRolesList");
+                var selRoleId = select.children("#rolesList").val();
+                var selRoleName = select.children("#rolesList").find(":selected").text();
+                console.log(selRoleName);
+                var vm = {
+                    "userId": button.attr("data-user-id"),
+                    "roleId": selRoleId
+                };
+                $.ajax({
+                    url: "/api/adminuserrole",
+                    method: "put",
+                    data: vm
+
+                })
+                    .done(function () {
+                        toastr.success("Role is Successfully assigned ");
+                        var $li = $("<li></li>", {
+                            text: selRoleName
+                        });
+                        list.append($li);
+
+                    })
+                    .fail(function () {
+                        toastr.error("Role is already assigned to the User");
+                    });
+
+            })
+
+
+
+     })
+    </script>    
+}
+
