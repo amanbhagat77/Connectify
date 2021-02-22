@@ -27,7 +27,7 @@ Supervisor dashboard.
 ## Technology Requirements
 **Technical Stack**
 * Asp.NET MVC for UI
-* Membership providers to be used for users and role creation
+* Identity Model to be used for users and role creation
 * All transactions must happen using Web API.
 * Use Entity Framework for data access layer
 
