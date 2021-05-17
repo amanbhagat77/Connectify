@@ -77,7 +77,7 @@
             $.validator.addMethod("validNumber", function () {
                 var pNumber =  $("#txtPhoneNumber").val();
                 var re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
-                console.log(re.test(pNumber));
+                //console.log(re.test(pNumber));
                 return re.test(pNumber);
             }, "Please enter a valid mobile number");
 

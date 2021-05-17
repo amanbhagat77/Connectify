@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Connectify.Models;
 using Connectify.Dto;
-using Connectify.ViewModels;
 
 namespace Connectify.Controllers
 {

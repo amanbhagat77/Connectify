@@ -17,7 +17,6 @@ namespace Connectify.Models
 
         public DbSet<Job> Jobs { get; set; }
         public DbSet<SupervisorEngineers> SupervisorEngineers { get; set; }
-        public DbSet<JobActivity> JobActivities { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

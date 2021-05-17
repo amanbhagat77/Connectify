@@ -41,7 +41,6 @@ namespace Connectify.Controllers.Api
         public IHttpActionResult GetUserList()
         {
 
-            
             var rolestore = new RoleStore<IdentityRole>(new ApplicationDbContext());
             var roleManager = new RoleManager<IdentityRole>(rolestore);
 

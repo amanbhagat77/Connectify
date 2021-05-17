@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNet.Identity.Owin;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Connectify.Models;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
 using AutoMapper;
 using Connectify.Dto;
@@ -40,6 +37,7 @@ namespace Connectify.Controllers.Api
             }
         }
 
+        //GET: /api/Supervisors
 
         public IHttpActionResult getSupervisors()
         {
@@ -58,6 +56,8 @@ namespace Connectify.Controllers.Api
             return Ok(supervisors);
         }
 
+
+        //GET: /api/supervisors/id
         public List<EngineerDto> getEngineersbySupervisorId(string supervisorId)
         {
             var EngineerIds = _context.SupervisorEngineers
@@ -77,6 +77,8 @@ namespace Connectify.Controllers.Api
             return engineerDto;
         }
 
+
+        //POST: /api/supervisors/SuperVisorEngineerDto
         [HttpPost]
         public IHttpActionResult MapSuperVisors(SupervisorEngineersDto supEngDto)
         {
@@ -86,6 +88,7 @@ namespace Connectify.Controllers.Api
                 return BadRequest();
             }
 
+            //mapping engineer to supervisor only iff that engineer is not already present in the database tagged to another supervisor.
             foreach(var engineerId in supEngDto.EngineerIds)
             {
                 if(supervisorEngineersInDB.Where(se => se.EngineerId == engineerId).Count() == 0)

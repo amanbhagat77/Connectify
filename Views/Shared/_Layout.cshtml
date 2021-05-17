@@ -24,7 +24,7 @@
                 <ul class="nav navbar-nav">
                     @if (Request.IsAuthenticated)
                     {
-                        if (!User.IsInRole("Engineer") && !User.IsInRole("Supervisor")) // Not Enhineer and Supervisor
+                        if (!User.IsInRole("Engineer") && !User.IsInRole("Supervisor")) // Not Engineer and Supervisor
                         {
                             <li>@Html.ActionLink("Jobs", "Index", "Job")</li>
                             <li>@Html.ActionLink("Create Job", "create", "Job")</li>

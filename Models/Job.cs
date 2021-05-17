@@ -49,6 +49,7 @@ namespace Connectify.Models
         public DateTime DateCreated { get; set; }
 
         public ApplicationUser Engineer { get; set; }
+        public Boolean flag { get; set; }
         
     }
 }

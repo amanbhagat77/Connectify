@@ -267,6 +267,10 @@
     <Compile Include="Migrations\202101081142092_AddAdminToUsersTable.designer.cs">
       <DependentUpon>202101081142092_AddAdminToUsersTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202102200749034_ADDEDFLAGINJOBS.cs" />
+    <Compile Include="Migrations\202102200749034_ADDEDFLAGINJOBS.designer.cs">
+      <DependentUpon>202102200749034_ADDEDFLAGINJOBS.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\Engineer.cs" />
@@ -274,7 +278,6 @@
     <Compile Include="Models\Enums\EnumJobType.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Job.cs" />
-    <Compile Include="Models\JobActivity.cs" />
     <Compile Include="Models\JobStatus.cs" />
     <Compile Include="Models\RoleName.cs" />
     <Compile Include="Models\SupervisorEngineers.cs" />
@@ -618,6 +621,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101081142092_AddAdminToUsersTable.resx">
       <DependentUpon>202101081142092_AddAdminToUsersTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202102200749034_ADDEDFLAGINJOBS.resx">
+      <DependentUpon>202102200749034_ADDEDFLAGINJOBS.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

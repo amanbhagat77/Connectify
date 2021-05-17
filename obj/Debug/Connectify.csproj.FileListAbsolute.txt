@@ -132,3 +132,4 @@ C:\Users\amanb\source\repos\Connectify\Connectify\obj\Debug\Connectify.Migration
 C:\Users\amanb\source\repos\Connectify\Connectify\obj\Debug\Connectify.Migrations.AddJobActivityTable.resources
 C:\Users\amanb\source\repos\Connectify\Connectify\obj\Debug\Connectify.Migrations.AddStatusDescriptionToJobTable.resources
 C:\Users\amanb\source\repos\Connectify\Connectify\obj\Debug\Connectify.Migrations.AddAdminToUsersTable.resources
+C:\Users\amanb\source\repos\Connectify\Connectify\obj\Debug\Connectify.Migrations.ADDEDFLAGINJOBS.resources

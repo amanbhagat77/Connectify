@@ -73,7 +73,6 @@ namespace Connectify.Controllers.Api
                     .ToList()
                     .Select(Mapper.Map<ApplicationUser, EngineerDto>)
                     .ToList();
-
             }
             else
             {
